@@ -1054,6 +1054,11 @@
     .srv:nth-child(5)::before { animation-delay: 2.4s; }
     .srv:nth-child(6)::before { animation-delay: 3.0s; }
     @keyframes srvShine { 0%,20% { left: -80%; opacity: 0; } 50% { opacity: 1; } 80%,100% { left: 180%; opacity: 0; } }
+
+    /* ── FLOATING SHAPES ACROSS ENTIRE PAGE ── */
+    @keyframes pgFloat  { 0%,100% { transform: translateY(0)    rotate(0deg);  } 50% { transform: translateY(-22px) rotate(10deg);  } }
+    @keyframes pgFloatB { 0%,100% { transform: translateY(0)    rotate(0deg);  } 50% { transform: translateY(-14px) rotate(-8deg);  } }
+    #pg-shapes { position: absolute; top: 0; left: 0; width: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
 </style>
 </head>
 <body>
@@ -2016,6 +2021,64 @@
       btn.appendChild(ripple);
       setTimeout(function() { ripple.remove(); }, 560);
     });
+  });
+})();
+
+// ── Floating triangles & rings across entire page ──
+(function() {
+  document.body.style.position = 'relative';
+  var wrap = document.createElement('div');
+  wrap.id = 'pg-shapes';
+  document.body.insertBefore(wrap, document.body.firstChild);
+  function setH() { wrap.style.height = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) + 'px'; }
+  window.addEventListener('load', setH);
+  window.addEventListener('resize', setH, { passive: true });
+  setTimeout(setH, 400);
+
+  // [left%, top%, halfSize, isTri, durS, delayS, anim]
+  var shapes = [
+    [88,  7, 18, true,  7.2, -1.1, 'pgFloat'],
+    [ 4, 13, 10, false, 5.8, -3.4, 'pgFloatB'],
+    [93, 21, 22, true,  9.1, -0.7, 'pgFloat'],
+    [12, 30, 14, true,  6.5, -5.2, 'pgFloatB'],
+    [79, 39,  8, false, 8.3, -2.0, 'pgFloat'],
+    [ 6, 48, 20, true,  7.7, -4.8, 'pgFloatB'],
+    [96, 56, 12, true,  5.4, -1.5, 'pgFloat'],
+    [20, 11, 16, false, 9.8, -6.3, 'pgFloatB'],
+    [85, 24, 18, true,  6.9, -0.3, 'pgFloat'],
+    [48, 43,  8, true,  8.1, -7.1, 'pgFloatB'],
+    [37, 65, 14, false, 7.5, -3.9, 'pgFloat'],
+    [64, 74, 16, true,  6.3, -2.6, 'pgFloatB'],
+    [24, 84, 10, true,  9.4, -5.7, 'pgFloat'],
+    [71,  4, 24, false, 8.6, -1.8, 'pgFloatB'],
+    [44, 92, 12, true,  7.0, -4.1, 'pgFloat'],
+    [ 2, 52, 16, true,  5.9, -6.8, 'pgFloatB'],
+    [56, 29, 20, false, 8.8, -2.3, 'pgFloat'],
+    [80, 62, 10, true,  7.3, -0.9, 'pgFloatB']
+  ];
+
+  shapes.forEach(function(s) {
+    var el = document.createElement('div');
+    el.style.position   = 'absolute';
+    el.style.pointerEvents = 'none';
+    el.style.left       = s[0] + '%';
+    el.style.top        = s[1] + '%';
+    el.style.animation  = s[6] + ' ' + s[4] + 's ease-in-out infinite ' + s[5] + 's';
+    if (s[3]) {
+      var h = s[2], bh = Math.round(h * 1.73);
+      el.style.width        = '0';
+      el.style.height       = '0';
+      el.style.borderLeft   = h  + 'px solid transparent';
+      el.style.borderRight  = h  + 'px solid transparent';
+      el.style.borderBottom = bh + 'px solid rgba(245,158,11,.10)';
+    } else {
+      var r = s[2] * 3;
+      el.style.width        = r + 'px';
+      el.style.height       = r + 'px';
+      el.style.borderRadius = '50%';
+      el.style.border       = '1px solid rgba(245,158,11,.09)';
+    }
+    wrap.appendChild(el);
   });
 })();
 
