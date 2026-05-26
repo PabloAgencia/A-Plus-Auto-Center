@@ -1120,19 +1120,18 @@
     @keyframes pgFloatB { 0%,100% { transform: translateY(0)    rotate(0deg);  } 50% { transform: translateY(-14px) rotate(-8deg);  } }
     #pg-shapes { position: absolute; top: 0; left: 0; width: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
 
-    /* ── TSPARTICLES CONSTELLATION ── */
-    #tsparticles {
+    /* ── CONSTELLATION CANVAS ── */
+    #particles-canvas {
       position: fixed;
       inset: 0;
       z-index: -1;
       pointer-events: none;
+      display: block;
     }
-    #tsparticles canvas { display: block; }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@tsparticles/bundle@3/tsparticles.bundle.min.js"></script>
 </head>
 <body>
-<div id="tsparticles"></div>
+<canvas id="particles-canvas"></canvas>
 <div id="scroll-bar"></div>
 
 <!-- COOKIE BANNER -->
@@ -2441,52 +2440,74 @@
 <!-- ========================================== -->
 
 <script>
+// ── Constellation canvas (whole page) ──
 (function () {
-  tsParticles.load({
-    id: "tsparticles",
-    options: {
-      background: { color: { value: "transparent" } },
-      fpsLimit: 60,
-      interactivity: {
-        events: {
-          onHover: { enable: true, mode: "grab" },
-          resize: { enable: true }
-        },
-        modes: {
-          grab: { distance: 160, links: { opacity: 0.35 } }
+  var canvas = document.getElementById('particles-canvas');
+  var ctx    = canvas.getContext('2d');
+  var W, H, pts = [];
+  var LINK_DIST = 150;
+  var COLOR     = '255,184,0';
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize, { passive: true });
+
+  var NUM = window.innerWidth < 768 ? 40 : 80;
+  for (var i = 0; i < NUM; i++) {
+    pts.push({
+      x:  Math.random() * W,
+      y:  Math.random() * H,
+      r:  Math.random() * 1.4 + 0.5,
+      dx: (Math.random() - 0.5) * 0.35,
+      dy: (Math.random() - 0.5) * 0.35,
+      a:  Math.random() * 0.4 + 0.15,
+      da: (Math.random() - 0.5) * 0.002
+    });
+  }
+
+  function tick() {
+    ctx.clearRect(0, 0, W, H);
+
+    for (var i = 0; i < pts.length; i++) {
+      var p = pts[i];
+      p.x += p.dx; p.y += p.dy;
+      p.a += p.da;
+      if (p.a < 0.1)  p.da =  Math.abs(p.da);
+      if (p.a > 0.55) p.da = -Math.abs(p.da);
+      if (p.x < 0)  p.x = W;
+      if (p.x > W)  p.x = 0;
+      if (p.y < 0)  p.y = H;
+      if (p.y > H)  p.y = 0;
+
+      // draw dot
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + COLOR + ',' + p.a + ')';
+      ctx.fill();
+
+      // draw links to nearby particles
+      for (var j = i + 1; j < pts.length; j++) {
+        var q   = pts[j];
+        var dx  = p.x - q.x;
+        var dy  = p.y - q.y;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < LINK_DIST) {
+          var alpha = (1 - dist / LINK_DIST) * 0.18;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.strokeStyle = 'rgba(' + COLOR + ',' + alpha + ')';
+          ctx.lineWidth = 0.7;
+          ctx.stroke();
         }
-      },
-      particles: {
-        color: { value: "#FFB800" },
-        links: {
-          color: "#FFB800",
-          distance: 150,
-          enable: true,
-          opacity: 0.12,
-          width: 0.8
-        },
-        move: {
-          direction: "none",
-          enable: true,
-          outModes: { default: "bounce" },
-          random: true,
-          speed: 0.5,
-          straight: false
-        },
-        number: {
-          density: { enable: true, area: 900 },
-          value: 75
-        },
-        opacity: {
-          value: { min: 0.2, max: 0.6 },
-          animation: { enable: true, speed: 0.4, sync: false }
-        },
-        shape: { type: "circle" },
-        size: { value: { min: 1, max: 2.5 } }
-      },
-      detectRetina: true
+      }
     }
-  });
+    requestAnimationFrame(tick);
+  }
+  tick();
 })();
 </script>
 </body>
