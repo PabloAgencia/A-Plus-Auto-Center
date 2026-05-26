@@ -455,29 +455,89 @@
 
     /* ── TESTIMONIOS ── */
     .testimonials { padding: 100px 40px; background: var(--black); }
-    .test-inner { max-width: 1100px; margin: 0 auto; }
-    .test-header { display: grid; grid-template-columns: 180px 1fr; gap: 60px; align-items: start; margin-bottom: 56px; }
-    .rating-big-num {
-      font-family: 'Space Grotesk', sans-serif; font-size: 84px; font-weight: 700;
-      color: var(--red-lt); line-height: 1; display: block;
+    .test-inner { max-width: 760px; margin: 0 auto; text-align: center; }
+    .test-intro { margin-bottom: 56px; }
+    .test-intro p { font-size: 15px; color: var(--slate-dim); line-height: 1.8; max-width: 520px; margin: 16px auto 0; }
+
+    /* ── LUXURY GOOGLE CARD ── */
+    .google-rating-card {
+      background: linear-gradient(145deg, #080A0E 0%, #111520 45%, #080A0E 100%);
+      border: 1px solid rgba(245,158,11,.28);
+      border-top: 2px solid #F59E0B;
+      border-radius: 6px;
+      padding: 52px 60px 44px;
+      position: relative; overflow: hidden;
+      text-align: left;
     }
-    .rating-stars-lg { font-size: 20px; color: var(--red-lt); letter-spacing: 4px; display: block; }
-    .rating-count { font-size: 12px; color: var(--slate-faint); margin-top: 8px; display: block; }
-    .test-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
-    .test-card {
-      background: var(--charcoal); padding: 34px 28px;
-      border-top: 3px solid var(--steel); transition: border-color .2s;
+    .google-rating-card::before {
+      content: '';
+      position: absolute; top: 0; left: -120%;
+      width: 55%; height: 100%;
+      background: linear-gradient(105deg, transparent, rgba(245,158,11,.05), transparent);
+      animation: grcShimmer 5s ease-in-out 1s infinite;
+      pointer-events: none;
     }
-    .test-card:hover { border-top-color: var(--red); }
-    .test-stars { color: var(--red-lt); font-size: 13px; letter-spacing: 2px; margin-bottom: 18px; display: block; }
-    .test-body {
-      font-size: 14px; font-weight: 400; line-height: 1.7; color: var(--slate);
-      font-style: italic; margin-bottom: 22px;
-      border-left: 3px solid var(--red); padding-left: 14px;
+    @keyframes grcShimmer { 0%,15%{left:-120%}85%,100%{left:190%} }
+    .grc-top {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 36px;
     }
-    .test-meta-name {
-      font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: .14em; color: var(--red-lt);
+    .grc-google {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .grc-g {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, #0A0C10, #1C2128);
+      border: 1px solid rgba(245,158,11,.3);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700;
+      color: #F59E0B; flex-shrink: 0;
+    }
+    .grc-brand {
+      font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: .2em; text-transform: uppercase; color: rgba(245,158,11,.7);
+    }
+    .grc-verified {
+      font-family: 'Space Grotesk', sans-serif; font-size: 9px; font-weight: 700;
+      letter-spacing: .2em; text-transform: uppercase;
+      color: #0A0C10; background: linear-gradient(90deg, #F59E0B, #FBBF24);
+      padding: 4px 10px; border-radius: 2px;
+    }
+    .grc-body {
+      display: flex; align-items: center; gap: 40px; flex-wrap: wrap;
+    }
+    .grc-num {
+      font-family: 'Space Grotesk', sans-serif; font-size: 96px; font-weight: 700;
+      color: #F59E0B; line-height: 1; flex-shrink: 0;
+      text-shadow: 0 0 40px rgba(245,158,11,.25);
+    }
+    .grc-right { flex: 1; }
+    .grc-stars { font-size: 26px; color: #F59E0B; letter-spacing: 4px; display: block; margin-bottom: 10px; }
+    .grc-count { font-size: 13px; color: var(--slate-dim); display: block; margin-bottom: 24px; }
+    .grc-divider {
+      width: 40px; height: 1px;
+      background: linear-gradient(90deg, #F59E0B, transparent);
+      margin-bottom: 24px;
+    }
+    .grc-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: #F59E0B; text-decoration: none;
+      border-bottom: 1px solid rgba(245,158,11,.3);
+      padding-bottom: 3px; transition: border-color .2s, color .2s;
+    }
+    .grc-cta:hover { color: #FBBF24; border-bottom-color: #FBBF24; }
+    .grc-corner {
+      position: absolute; bottom: 0; right: 0;
+      width: 120px; height: 120px;
+      background: radial-gradient(circle at bottom right, rgba(245,158,11,.07), transparent 70%);
+      pointer-events: none;
+    }
+    @media (max-width: 600px) {
+      .google-rating-card { padding: 36px 28px 32px; }
+      .grc-num { font-size: 72px; }
+      .grc-body { gap: 24px; }
     }
     .test-meta-info { font-size: 11px; color: var(--slate-faint); margin-top: 3px; }
 
@@ -1059,9 +1119,20 @@
     @keyframes pgFloat  { 0%,100% { transform: translateY(0)    rotate(0deg);  } 50% { transform: translateY(-22px) rotate(10deg);  } }
     @keyframes pgFloatB { 0%,100% { transform: translateY(0)    rotate(0deg);  } 50% { transform: translateY(-14px) rotate(-8deg);  } }
     #pg-shapes { position: absolute; top: 0; left: 0; width: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+
+    /* ── TSPARTICLES CONSTELLATION ── */
+    #tsparticles {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+    #tsparticles canvas { display: block; }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@tsparticles/bundle@3/tsparticles.bundle.min.js"></script>
 </head>
 <body>
+<div id="tsparticles"></div>
 <div id="scroll-bar"></div>
 
 <!-- COOKIE BANNER -->
@@ -2368,5 +2439,55 @@
 <!-- ========================================== -->
 <!-- END OF A PLUS AUTO CENTER CHATBOT          -->
 <!-- ========================================== -->
+
+<script>
+(function () {
+  tsParticles.load({
+    id: "tsparticles",
+    options: {
+      background: { color: { value: "transparent" } },
+      fpsLimit: 60,
+      interactivity: {
+        events: {
+          onHover: { enable: true, mode: "grab" },
+          resize: { enable: true }
+        },
+        modes: {
+          grab: { distance: 160, links: { opacity: 0.35 } }
+        }
+      },
+      particles: {
+        color: { value: "#FFB800" },
+        links: {
+          color: "#FFB800",
+          distance: 150,
+          enable: true,
+          opacity: 0.12,
+          width: 0.8
+        },
+        move: {
+          direction: "none",
+          enable: true,
+          outModes: { default: "bounce" },
+          random: true,
+          speed: 0.5,
+          straight: false
+        },
+        number: {
+          density: { enable: true, area: 900 },
+          value: 75
+        },
+        opacity: {
+          value: { min: 0.2, max: 0.6 },
+          animation: { enable: true, speed: 0.4, sync: false }
+        },
+        shape: { type: "circle" },
+        size: { value: { min: 1, max: 2.5 } }
+      },
+      detectRetina: true
+    }
+  });
+})();
+</script>
 </body>
 </html>

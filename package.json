@@ -1,0 +1,9 @@
+{
+  "name": "taller-utah",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A Plus Auto Center - Auto Repair Shop Salt Lake City",
+  "dependencies": {
+    "@tsparticles/bundle": "^3.7.1"
+  }
+}
