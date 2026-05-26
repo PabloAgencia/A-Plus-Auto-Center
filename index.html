@@ -308,7 +308,7 @@
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
     /* ── SOBRE NOSOTROS ── */
-    .about { background: var(--charcoal); padding: 100px 40px; }
+    .about { background: rgba(19,23,30,0.88); padding: 100px 40px; }
     .about-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
     .about-text-p { font-size: 15px; font-weight: 400; line-height: 1.85; color: var(--slate-dim); margin-bottom: 18px; }
     .about-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 32px; }
@@ -381,7 +381,7 @@
     }
 
     /* ── SERVICIOS ── */
-    .services { padding: 100px 40px; background: var(--black); }
+    .services { padding: 100px 40px; background: rgba(13,17,23,0.88); }
     .services-inner { max-width: 1100px; margin: 0 auto; }
     .services-header { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 56px; align-items: end; }
     .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
@@ -421,7 +421,7 @@
     .srv-featured .srv-desc { color: var(--slate); }
 
     /* ── AVERÍAS ── */
-    .averias { padding: 90px 40px; background: var(--charcoal); }
+    .averias { padding: 90px 40px; background: rgba(19,23,30,0.88); }
     .averias-inner { max-width: 1100px; margin: 0 auto; }
     .averias-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; margin-top: 48px; }
     .averia-card {
@@ -454,7 +454,7 @@
     .promise-text strong { color: var(--white); font-weight: 700; }
 
     /* ── TESTIMONIOS ── */
-    .testimonials { padding: 100px 40px; background: var(--black); }
+    .testimonials { padding: 100px 40px; background: rgba(13,17,23,0.88); }
     .test-inner { max-width: 760px; margin: 0 auto; text-align: center; }
     .test-intro { margin-bottom: 56px; }
     .test-intro p { font-size: 15px; color: var(--slate-dim); line-height: 1.8; max-width: 520px; margin: 16px auto 0; }
@@ -542,7 +542,7 @@
     .test-meta-info { font-size: 11px; color: var(--slate-faint); margin-top: 3px; }
 
     /* ── CONTACTO ── */
-    .contact { padding: 100px 40px; background: var(--charcoal); }
+    .contact { padding: 100px 40px; background: rgba(19,23,30,0.88); }
     .contact-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
     .contact-info-title {
       font-family: 'Space Grotesk', sans-serif; font-size: clamp(30px, 4.2vw, 50px);
@@ -602,7 +602,7 @@
     #fsuccess p { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700; text-transform: uppercase; color: var(--red-lt); }
 
     /* ── UBICACIÓN ── */
-    .ubicacion { padding: 100px 40px; background: var(--black); }
+    .ubicacion { padding: 100px 40px; background: rgba(13,17,23,0.88); }
     .ubi-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
     .ubi-map { aspect-ratio: 4/3; background: var(--graphite); position: relative; overflow: hidden; }
     .ubi-info h3 {
@@ -626,7 +626,7 @@
     .btn-maps:hover { background: var(--red); color: var(--white); }
 
     /* ── FAQs ── */
-    .faqs { padding: 80px 48px; background: var(--charcoal); }
+    .faqs { padding: 80px 48px; background: rgba(19,23,30,0.88); }
     .faqs-inner { max-width: 820px; margin: 0 auto; }
     .faq-list { margin-top: 44px; display: flex; flex-direction: column; gap: 3px; }
     .faq-item { background: var(--steel); border-left: 3px solid transparent; transition: border-color .25s; border-radius: 3px; }
@@ -642,7 +642,7 @@
     .faq-a p { font-size: 14px; font-weight: 400; line-height: 1.8; color: var(--slate-dim); border-top: 1px solid var(--steel); padding-top: 16px; }
 
     /* ── FOOTER ── */
-    footer { background: var(--charcoal); border-top: 3px solid var(--red); padding: 60px 40px 30px; }
+    footer { background: rgba(19,23,30,0.88); border-top: 3px solid var(--red); padding: 60px 40px 30px; }
     .footer-top { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 50px; }
     .footer-brand p { font-size: 13px; color: var(--slate-faint); line-height: 1.8; margin-top: 16px; max-width: 240px; }
     .footer-col h4 { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; color: var(--red-lt); margin-bottom: 16px; }
@@ -1156,7 +1156,6 @@
     <a href="#servicios">Services</a>
     <a href="#averias">Issues</a>
     <a href="#nosotros">About</a>
-    <a href="#testimonios">Reviews</a>
     <a href="#contacto">Contact</a>
     <a href="tel:8015330389" class="nav-cta">📞 (801) 533-0389</a>
   </div>
@@ -1168,7 +1167,6 @@
   <a href="#servicios" onclick="closeNav()">Services</a>
   <a href="#averias" onclick="closeNav()">Issues</a>
   <a href="#nosotros" onclick="closeNav()">About</a>
-  <a href="#testimonios" onclick="closeNav()">Reviews</a>
   <a href="#contacto" onclick="closeNav()">Contact</a>
   <a href="tel:8015330389" class="mob-cta" onclick="closeNav()">Call Now</a>
 </div>
@@ -1487,51 +1485,6 @@
   </div>
 </div>
 
-<!-- TESTIMONIOS -->
-<section class="testimonials reveal" id="testimonios">
-  <div class="test-inner">
-    <div class="test-header">
-      <div>
-        <span class="rating-big-num">4.6</span>
-        <span class="rating-stars-lg">★★★★★</span>
-        <a href="https://www.google.com/maps/place/A+Plus+Auto+Center/@40.7487257,-111.900895,1191m/data=!3m2!1e3!4b1!4m6!3m5!1s0x8752f52106419e93:0xdc614448ebff343!8m2!3d40.7487257!4d-111.900895!16s%2Fg%2F11dyn_mcmk"
-           target="_blank" rel="noopener noreferrer"
-           style="display:inline-block;color:var(--red-lt);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:.06em;text-decoration:none;border-bottom:1px solid rgba(220,38,38,.35);padding-bottom:2px;transition:border-color .2s;margin-top:10px;"
-           aria-label="View reviews on Google">
-          View on Google ↗
-        </a>
-      </div>
-      <div>
-        <div class="section-tag">Real Reviews</div>
-        <h2 class="section-h2">What our<br/><em>customers</em> say</h2>
-        <p style="font-size:14px;color:var(--slate-dim);line-height:1.85;margin-top:16px">
-          Customers across Salt Lake City trust A Plus Auto Center. Here is what they have to say.
-        </p>
-      </div>
-    </div>
-    <div class="test-grid">
-      <div class="test-card">
-        <span class="test-stars">★★★★★</span>
-        <p class="test-body">"Brought my car in with a weird noise and in less than two hours they had figured it out and fixed it. Super fast and very professional. Great service from the first moment. I know where to bring my car from now on."</p>
-        <div class="test-meta-name">Jessica Thompson</div>
-        <div class="test-meta-info">Google Reviews · Salt Lake City</div>
-      </div>
-      <div class="test-card">
-        <span class="test-stars">★★★★★</span>
-        <p class="test-body">"I have been bringing my cars here for years and it is always the same: honesty, clear explanations, and fair prices. They give you the estimate before touching anything and they deliver on what they say. A truly trustworthy shop."</p>
-        <div class="test-meta-name">Robert Sandoval</div>
-        <div class="test-meta-info">Google Reviews · Regular Customer</div>
-      </div>
-      <div class="test-card">
-        <span class="test-stars">★★★★★</span>
-        <p class="test-body">"My car would not start and they fixed it the same day I called. Fast service, reasonable price, and they explained exactly what had happened. You can tell they know what they are doing. Highly recommended for any repair."</p>
-        <div class="test-meta-name">David Kim</div>
-        <div class="test-meta-info">Google Reviews · 2 months ago</div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- CONTACTO -->
 <section class="contact reveal" id="contacto">
   <div class="contact-grid">
@@ -1610,7 +1563,7 @@
 
 <!-- UBICACIÓN -->
 <!-- BUSINESS CARD STRIP -->
-<div style="background:#0D1117;padding:60px 0 40px;overflow:visible;">
+<div style="background:rgba(13,17,23,0.88);padding:60px 0 40px;overflow:visible;">
   <div style="max-width:1200px;margin:0 auto;padding:0 40px;display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex-wrap:wrap;">
 
     <!-- LEFT: two car images -->
@@ -1792,7 +1745,6 @@
       <h4>Shop</h4>
       <ul>
         <li><a href="#nosotros">About Us</a></li>
-        <li><a href="#testimonios">Reviews</a></li>
         <li><a href="#faqs">FAQ</a></li>
         <li><a href="#contacto">Contact</a></li>
       </ul>
