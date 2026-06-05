@@ -1102,6 +1102,34 @@
     }
     .google-rating-card { animation: ratingPulse 3.2s ease-in-out infinite; }
 
+    /* ── SCROLL PROGRESS BAR ── */
+    #scroll-bar { position:fixed; top:0; left:0; height:3px; width:0%; z-index:10000; pointer-events:none; background:linear-gradient(90deg,var(--red),#FBBF24); }
+
+    /* ── PULSE EN BOTÓN LLAMADA ── */
+    .btn-primary { position:relative; }
+    .btn-primary::before { content:''; position:absolute; inset:-5px; border-radius:8px; border:2px solid var(--red); opacity:0; animation:callPulse 2.4s ease-out infinite; }
+    @keyframes callPulse { 0%{transform:scale(1);opacity:.65} 100%{transform:scale(1.3);opacity:0} }
+
+    /* ── HOVER ZOOM EN IMAGEN SERVICIO ── */
+    .srv-img { transition:transform .45s ease; }
+    .srv:hover .srv-img { transform:scale(1.07); }
+
+    /* ── BEFORE / AFTER SLIDER ── */
+    .ba-section { padding:80px 40px; background:rgba(13,17,23,0.9); }
+    .ba-inner { max-width:900px; margin:0 auto; text-align:center; }
+    .ba-wrap { position:relative; width:100%; aspect-ratio:16/9; overflow:hidden; border-radius:4px; user-select:none; box-shadow:0 20px 60px rgba(0,0,0,.6); }
+    .ba-before,.ba-after { position:absolute; inset:0; background-size:cover; background-position:center; }
+    .ba-before { background-image:url('https://images.pexels.com/photos/3807386/pexels-photo-3807386.jpeg?auto=compress&cs=tinysrgb&w=1200&q=80'); }
+    .ba-after  { background-image:url('https://images.pexels.com/photos/8985450/pexels-photo-8985450.jpeg?auto=compress&cs=tinysrgb&w=1200&q=80'); clip-path:inset(0 50% 0 0); }
+    .ba-handle { position:absolute; top:0; bottom:0; left:50%; width:3px; background:#F59E0B; transform:translateX(-50%); pointer-events:none; }
+    .ba-handle::before { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:42px; height:42px; border-radius:50%; background:#F59E0B; border:3px solid #fff; box-shadow:0 4px 16px rgba(0,0,0,.5); }
+    .ba-handle::after { content:'◀ ▶'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:#0D1117; font-size:10px; font-weight:800; pointer-events:none; }
+    .ba-label { position:absolute; bottom:16px; background:rgba(0,0,0,.72); color:#fff; font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; padding:5px 12px; border-radius:3px; }
+    .ba-label-before { left:16px; }
+    .ba-label-after  { right:16px; }
+    .ba-range { position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:ew-resize; margin:0; -webkit-appearance:none; appearance:none; }
+    @media(max-width:580px) { .ba-section { padding:60px 20px; } }
+
     /* ── SHINE EN SERVICE CARDS ── */
     .srv { position: relative; overflow: hidden; }
     .srv::before {
@@ -1135,6 +1163,7 @@
 </style>
 </head>
 <body>
+<div id="scroll-bar"></div>
 <canvas id="particles-canvas"></canvas>
 <div id="scroll-bar"></div>
 
@@ -1429,6 +1458,23 @@
     <div class="pb-img"><img src="https://images.pexels.com/photos/16682793/pexels-photo-16682793.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Wheel & Tire</span></div>
   </div>
 </div>
+
+<!-- BEFORE / AFTER -->
+<section class="ba-section reveal">
+  <div class="ba-inner">
+    <div class="section-tag">Results</div>
+    <h2 class="section-h2" style="margin-bottom:32px">From broken<br/>to <em>like new</em></h2>
+    <div class="ba-wrap">
+      <div class="ba-before"></div>
+      <div class="ba-after" id="ba-after"></div>
+      <div class="ba-handle" id="ba-handle"></div>
+      <span class="ba-label ba-label-before">Before</span>
+      <span class="ba-label ba-label-after">After</span>
+      <input type="range" class="ba-range" id="ba-range" min="0" max="100" value="50"/>
+    </div>
+    <p style="margin-top:18px;font-size:13px;color:var(--slate-dim)">Drag to compare · Every repair done to last</p>
+  </div>
+</section>
 
 <!-- AVERÍAS COMUNES -->
 <section class="averias reveal" id="averias">
@@ -2152,6 +2198,67 @@
     idx = (idx + 1) % phrases.length;
     showPhrase(phrases[idx]);
   }, 5000);
+})();
+
+// ── Scroll progress bar ──
+(function(){
+  var bar = document.getElementById('scroll-bar');
+  if(!bar) return;
+  window.addEventListener('scroll', function(){
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (window.scrollY / max * 100) + '%';
+  }, {passive:true});
+})();
+
+// ── Parallax hero background ──
+(function(){
+  var bg = document.querySelector('.hero-bg-img');
+  if(!bg) return;
+  window.addEventListener('scroll', function(){
+    if(window.scrollY < window.innerHeight)
+      bg.style.transform = 'translateY(' + (window.scrollY * 0.3) + 'px) scale(1.15)';
+  }, {passive:true});
+})();
+
+// ── Counter animation on hero stats ──
+(function(){
+  var items = [
+    {sel:'.hstat:first-child .hstat-num', from:0, to:10, dec:0, prefix:'+'},
+    {sel:'.hstat:last-child .hstat-num',  from:0, to:4.6, dec:1, prefix:''}
+  ];
+  var done = false;
+  function run(){
+    if(done) return; done = true;
+    items.forEach(function(s){
+      var el = document.querySelector(s.sel);
+      if(!el) return;
+      var start = null, dur = 1800;
+      (function step(ts){
+        if(!start) start = ts;
+        var p = Math.min((ts-start)/dur, 1);
+        var ease = 1 - Math.pow(1-p, 3);
+        el.textContent = s.prefix + (s.from + (s.to - s.from)*ease).toFixed(s.dec);
+        if(p < 1) requestAnimationFrame(step);
+      })(performance.now());
+    });
+  }
+  var obs = new IntersectionObserver(function(e){ if(e[0].isIntersecting){run();obs.disconnect();} },{threshold:0.6});
+  var el = document.querySelector('.hero-stats');
+  if(el) obs.observe(el);
+})();
+
+// ── Before / After slider ──
+(function(){
+  var range  = document.getElementById('ba-range');
+  var after  = document.getElementById('ba-after');
+  var handle = document.getElementById('ba-handle');
+  if(!range||!after||!handle) return;
+  function update(v){
+    after.style.clipPath = 'inset(0 '+(100-v)+'% 0 0)';
+    handle.style.left = v + '%';
+  }
+  range.addEventListener('input', function(){ update(this.value); });
+  update(50);
 })();
 
 </script>
