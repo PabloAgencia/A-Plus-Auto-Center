@@ -354,16 +354,18 @@
     .photo-band {
       height: 300px; position: relative; z-index: 1; overflow: hidden;
       display: flex; gap: 0;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 7%, black 93%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, black 7%, black 93%, transparent 100%);
     }
     .pb-track {
-      display: flex; gap: 3px;
+      display: flex; gap: 0; width: max-content;
       animation: pbSlide 38s linear infinite;
       will-change: transform;
     }
     .photo-band:hover .pb-track { animation-play-state: paused; }
     @keyframes pbSlide {
       from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
+      to   { transform: translateX(-33.333%); }
     }
     .pb-img { overflow: hidden; position: relative; flex-shrink: 0; width: 480px; }
     @media (max-width: 900px) { .pb-img { width: 72vw; } }
@@ -1391,24 +1393,33 @@
 <!-- PHOTO BAND — slider continuo -->
 <div class="photo-band reveal" aria-hidden="true">
   <div class="pb-track">
-    <!-- SET A — 8 images -->
-    <div class="pb-img"><img src="https://images.pexels.com/photos/8985714/pexels-photo-8985714.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt="Engine diagnostics" loading="lazy"/><span class="pb-label">Diagnostics</span></div>
-    <div class="pb-img"><img src="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt="Mechanic at work" loading="lazy"/><span class="pb-label">Maintenance</span></div>
-    <div class="pb-img"><img src="https://images.pexels.com/photos/1619854/pexels-photo-1619854.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt="Car engine repair" loading="lazy"/><span class="pb-label">Engine Repair</span></div>
-    <div class="pb-img"><img src="https://images.pexels.com/photos/3964704/pexels-photo-3964704.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt="Brake service" loading="lazy"/><span class="pb-label">Brake Service</span></div>
-    <div class="pb-img"><img src="https://images.pexels.com/photos/4480505/pexels-photo-4480505.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt="Oil change service" loading="lazy"/><span class="pb-label">Oil Change</span></div>
-    <div class="pb-img"><img src="https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt="Auto tools" loading="lazy"/><span class="pb-label">Full Service</span></div>
-    <div class="pb-img"><img src="https://images.pexels.com/photos/1149137/pexels-photo-1149137.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt="Vehicle inspection" loading="lazy"/><span class="pb-label">Inspection</span></div>
-    <div class="pb-img"><img src="https://images.pexels.com/photos/3807386/pexels-photo-3807386.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt="Mechanic checking car" loading="lazy"/><span class="pb-label">Diagnostics</span></div>
-    <!-- SET B — exact duplicate for seamless loop -->
-    <div class="pb-img"><img src="https://images.pexels.com/photos/8985714/pexels-photo-8985714.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt="" loading="lazy"/><span class="pb-label">Diagnostics</span></div>
-    <div class="pb-img"><img src="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt="" loading="lazy"/><span class="pb-label">Maintenance</span></div>
-    <div class="pb-img"><img src="https://images.pexels.com/photos/1619854/pexels-photo-1619854.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt="" loading="lazy"/><span class="pb-label">Engine Repair</span></div>
-    <div class="pb-img"><img src="https://images.pexels.com/photos/3964704/pexels-photo-3964704.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt="" loading="lazy"/><span class="pb-label">Brake Service</span></div>
-    <div class="pb-img"><img src="https://images.pexels.com/photos/4480505/pexels-photo-4480505.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt="" loading="lazy"/><span class="pb-label">Oil Change</span></div>
-    <div class="pb-img"><img src="https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt="" loading="lazy"/><span class="pb-label">Full Service</span></div>
-    <div class="pb-img"><img src="https://images.pexels.com/photos/1149137/pexels-photo-1149137.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt="" loading="lazy"/><span class="pb-label">Inspection</span></div>
-    <div class="pb-img"><img src="https://images.pexels.com/photos/3807386/pexels-photo-3807386.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt="" loading="lazy"/><span class="pb-label">Diagnostics</span></div>
+    <!-- ── SET A ── -->
+    <div class="pb-img"><img src="https://images.pexels.com/photos/8985714/pexels-photo-8985714.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Diagnostics</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Maintenance</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/1619854/pexels-photo-1619854.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Engine Repair</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/3964704/pexels-photo-3964704.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Brake Service</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/4480505/pexels-photo-4480505.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Oil Change</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Full Service</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/1149137/pexels-photo-1149137.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Inspection</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/3807386/pexels-photo-3807386.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Diagnostics</span></div>
+    <!-- ── SET B ── -->
+    <div class="pb-img"><img src="https://images.pexels.com/photos/8985714/pexels-photo-8985714.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Diagnostics</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Maintenance</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/1619854/pexels-photo-1619854.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Engine Repair</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/3964704/pexels-photo-3964704.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Brake Service</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/4480505/pexels-photo-4480505.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Oil Change</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Full Service</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/1149137/pexels-photo-1149137.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Inspection</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/3807386/pexels-photo-3807386.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Diagnostics</span></div>
+    <!-- ── SET C ── -->
+    <div class="pb-img"><img src="https://images.pexels.com/photos/8985714/pexels-photo-8985714.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Diagnostics</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Maintenance</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/1619854/pexels-photo-1619854.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Engine Repair</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/3964704/pexels-photo-3964704.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Brake Service</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/4480505/pexels-photo-4480505.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Oil Change</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Full Service</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/1149137/pexels-photo-1149137.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Inspection</span></div>
+    <div class="pb-img"><img src="https://images.pexels.com/photos/3807386/pexels-photo-3807386.jpeg?auto=compress&cs=tinysrgb&w=800&q=75" alt=""/><span class="pb-label">Diagnostics</span></div>
   </div>
 </div>
 
