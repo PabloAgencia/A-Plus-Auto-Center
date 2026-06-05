@@ -1107,8 +1107,9 @@
 
     /* ── PULSE EN BOTÓN LLAMADA ── */
     .btn-primary { position:relative; }
-    .btn-primary::before { content:''; position:absolute; inset:-5px; border-radius:8px; border:2px solid var(--red); opacity:0; animation:callPulse 2.4s ease-out infinite; }
+    .btn-primary::before { content:''; position:absolute; inset:-5px; border-radius:8px; border:2px solid var(--red); opacity:0; animation:callPulse 2.4s ease-out infinite; pointer-events:none; }
     @keyframes callPulse { 0%{transform:scale(1);opacity:.65} 100%{transform:scale(1.3);opacity:0} }
+    .hero-ctas { overflow:visible; }
 
     /* ── HOVER ZOOM EN IMAGEN SERVICIO ── */
     .srv-img { transition:transform .45s ease; }
@@ -1128,7 +1129,17 @@
     .ba-label-before { left:16px; }
     .ba-label-after  { right:16px; }
     .ba-range { position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:ew-resize; margin:0; -webkit-appearance:none; appearance:none; }
-    @media(max-width:580px) { .ba-section { padding:60px 20px; } }
+    @media(max-width:768px) {
+      .ba-section { padding:60px 20px; }
+      .ba-wrap { aspect-ratio:4/3; }
+      .ba-label { font-size:10px; padding:4px 8px; bottom:10px; }
+      .ba-label-before { left:8px; }
+      .ba-label-after  { right:8px; }
+      .ba-handle::before { width:34px; height:34px; }
+    }
+    @media(max-width:480px) {
+      .ba-wrap { aspect-ratio:1/1; }
+    }
 
     /* ── SHINE EN SERVICE CARDS ── */
     .srv { position: relative; overflow: hidden; }
@@ -2210,8 +2221,9 @@
   }, {passive:true});
 })();
 
-// ── Parallax hero background ──
+// ── Parallax hero background (desktop only) ──
 (function(){
+  if(window.innerWidth < 768) return;
   var bg = document.querySelector('.hero-bg-img');
   if(!bg) return;
   window.addEventListener('scroll', function(){
@@ -2252,12 +2264,22 @@
   var range  = document.getElementById('ba-range');
   var after  = document.getElementById('ba-after');
   var handle = document.getElementById('ba-handle');
-  if(!range||!after||!handle) return;
+  var wrap   = after && after.closest('.ba-wrap');
+  if(!range||!after||!handle||!wrap) return;
   function update(v){
+    v = Math.max(0, Math.min(100, v));
     after.style.clipPath = 'inset(0 '+(100-v)+'% 0 0)';
     handle.style.left = v + '%';
+    range.value = v;
+  }
+  function posFromTouch(e){
+    var rect = wrap.getBoundingClientRect();
+    var x = (e.touches[0].clientX - rect.left) / rect.width * 100;
+    update(x);
   }
   range.addEventListener('input', function(){ update(this.value); });
+  wrap.addEventListener('touchmove', function(e){ e.preventDefault(); posFromTouch(e); }, {passive:false});
+  wrap.addEventListener('touchstart', function(e){ posFromTouch(e); }, {passive:true});
   update(50);
 })();
 
