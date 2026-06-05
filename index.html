@@ -1141,6 +1141,23 @@
       .ba-wrap { aspect-ratio:1/1; }
     }
 
+    /* ── LOADING SCREEN ── */
+    #loader { position:fixed; inset:0; background:#0D1117; z-index:99999; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:24px; transition:opacity .55s ease, visibility .55s; }
+    #loader.out { opacity:0; visibility:hidden; pointer-events:none; }
+    #loader-ring { width:64px; height:64px; border:3px solid rgba(245,158,11,.2); border-top-color:#F59E0B; border-radius:50%; animation:loaderSpin .8s linear infinite; }
+    #loader-bar { width:180px; height:2px; background:rgba(245,158,11,.15); border-radius:2px; overflow:hidden; }
+    #loader-fill { height:100%; background:linear-gradient(90deg,#DC2626,#F59E0B); animation:loaderProg 1.3s ease-out forwards; }
+    @keyframes loaderSpin { to{transform:rotate(360deg)} }
+    @keyframes loaderProg { from{width:0} to{width:100%} }
+
+    /* ── ESTRELLAS GOOGLE ── */
+    .hstat-stars { display:flex; justify-content:center; gap:2px; margin:2px 0; }
+    .hstat-stars span { color:rgba(245,158,11,.15); font-size:14px; transition:color .3s, transform .3s; }
+    .hstat-stars span.lit { color:#F59E0B; transform:scale(1.25); }
+
+    /* ── MAGNETIC: transición suave al soltar ── */
+    .btn-primary, .btn-outline, .nav-cta { transition:transform .25s cubic-bezier(.23,1,.32,1), background .2s; }
+
     /* ── CURSOR SPOTLIGHT ── */
     #cursor-glow { position:fixed; width:380px; height:380px; border-radius:50%; pointer-events:none; z-index:1; transform:translate(-50%,-50%); background:radial-gradient(circle, rgba(245,158,11,.07) 0%, transparent 65%); transition:left .08s, top .08s; display:none; }
     @media(hover:hover){ #cursor-glow { display:block; } }
@@ -1199,6 +1216,7 @@
 </style>
 </head>
 <body>
+<div id="loader"><div id="loader-ring"></div><div id="loader-bar"><div id="loader-fill"></div></div></div>
 <div id="scroll-bar"></div>
 <div id="cursor-glow"></div>
 <canvas id="particles-canvas"></canvas>
@@ -1281,7 +1299,10 @@
     </div>
     <div class="hstat">
       <span class="hstat-num">4.6</span>
-      <span class="hstat-label">★ Google rating</span>
+      <div class="hstat-stars" id="hstat-stars">
+        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      </div>
+      <span class="hstat-label">Google rating</span>
     </div>
   </div>
 </section>
@@ -2640,13 +2661,16 @@
 <!-- ========================================== -->
 
 <script>
-// ── Constellation canvas (whole page) ──
+// ── Constellation canvas (whole page) — with mouse repulsion ──
 (function () {
   var canvas = document.getElementById('particles-canvas');
   var ctx    = canvas.getContext('2d');
   var W, H, pts = [];
   var LINK_DIST = 150;
   var COLOR     = '255,184,0';
+  var mouse = { x: -9999, y: -9999 };
+
+  window.addEventListener('mousemove', function(e){ mouse.x=e.clientX; mouse.y=e.clientY; }, {passive:true});
 
   function resize() {
     W = canvas.width  = window.innerWidth;
@@ -2673,6 +2697,14 @@
 
     for (var i = 0; i < pts.length; i++) {
       var p = pts[i];
+      // mouse repulsion
+      var mdx = p.x - mouse.x, mdy = p.y - mouse.y;
+      var mdist = Math.sqrt(mdx*mdx + mdy*mdy);
+      if (mdist < 120 && mdist > 0) {
+        var force = (120 - mdist) / 120;
+        p.x += (mdx/mdist) * force * 2.5;
+        p.y += (mdy/mdist) * force * 2.5;
+      }
       p.x += p.dx; p.y += p.dy;
       p.a += p.da;
       if (p.a < 0.1)  p.da =  Math.abs(p.da);
@@ -2682,13 +2714,11 @@
       if (p.y < 0)  p.y = H;
       if (p.y > H)  p.y = 0;
 
-      // draw dot
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(' + COLOR + ',' + p.a + ')';
       ctx.fill();
 
-      // draw links to nearby particles
       for (var j = i + 1; j < pts.length; j++) {
         var q   = pts[j];
         var dx  = p.x - q.x;
@@ -2708,6 +2738,84 @@
     requestAnimationFrame(tick);
   }
   tick();
+})();
+
+// ── Loading screen ──
+window.addEventListener('load', function(){
+  setTimeout(function(){
+    var l = document.getElementById('loader');
+    if(l){ l.classList.add('out'); setTimeout(function(){ l.remove(); },600); }
+  }, 1400);
+});
+
+// ── Magnetic buttons ──
+(function(){
+  if(window.innerWidth < 768) return;
+  document.querySelectorAll('.btn-primary,.btn-outline,.nav-cta').forEach(function(btn){
+    btn.addEventListener('mousemove', function(e){
+      var r = btn.getBoundingClientRect();
+      var x = (e.clientX - r.left - r.width/2)  * 0.28;
+      var y = (e.clientY - r.top  - r.height/2) * 0.28;
+      btn.style.transform = 'translate('+x+'px,'+y+'px)';
+    });
+    btn.addEventListener('mouseleave', function(){
+      btn.style.transform = '';
+    });
+  });
+})();
+
+// ── Slot machine en número de teléfono ──
+(function(){
+  var digits = '0123456789';
+  document.querySelectorAll('a[href^="tel"]').forEach(function(el){
+    var original = el.innerText;
+    var running = false;
+    el.addEventListener('mouseenter', function(){
+      if(running) return; running = true;
+      var step = 0, total = 12;
+      var iv = setInterval(function(){
+        el.innerText = original.split('').map(function(c){
+          return /\d/.test(c) && step < total - 3 ? digits[Math.floor(Math.random()*10)] : c;
+        }).join('');
+        if(++step >= total){ clearInterval(iv); el.innerText = original; running = false; }
+      }, 45);
+    });
+  });
+})();
+
+// ── Estrellas Google rating animadas ──
+(function(){
+  var stars = document.querySelectorAll('#hstat-stars span');
+  if(!stars.length) return;
+  var done = false;
+  var obs = new IntersectionObserver(function(e){
+    if(!e[0].isIntersecting || done) return;
+    done = true; obs.disconnect();
+    stars.forEach(function(s, i){
+      setTimeout(function(){
+        s.classList.add('lit');
+      }, i * 180);
+    });
+  }, {threshold:0.8});
+  var el = document.getElementById('hstat-stars');
+  if(el) obs.observe(el);
+})();
+
+// ── Smooth scroll momentum (desktop) ──
+(function(){
+  if(window.innerWidth < 768 || !window.addEventListener) return;
+  var current = window.scrollY, target = current, ease = 0.1, ticking = false;
+  function update(){
+    current += (target - current) * ease;
+    if(Math.abs(target - current) < 0.5){ current = target; ticking = false; return; }
+    window.scrollTo(0, current);
+    requestAnimationFrame(update);
+  }
+  window.addEventListener('wheel', function(e){
+    e.preventDefault();
+    target = Math.max(0, Math.min(document.body.scrollHeight - window.innerHeight, target + e.deltaY * 1.2));
+    if(!ticking){ ticking = true; requestAnimationFrame(update); }
+  }, {passive:false});
 })();
 </script>
 </body>
