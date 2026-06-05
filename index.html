@@ -1190,7 +1190,7 @@
     </div>
     <h1 class="hero-h1">
       Auto Repair<br/>
-      <span class="highlight" id="tw-target">Salt Lake City.</span>
+      <span class="highlight" id="tw-target"></span>
     </h1>
     <div class="hero-divider"></div>
     <p class="hero-sub">
@@ -2123,26 +2123,35 @@
   });
 })();
 
-// ── Typewriter on hero highlight ──
+// ── Rotating hero highlight ──
 (function() {
   var el = document.getElementById('tw-target');
   if (!el) return;
-  var text = el.textContent;
-  el.textContent = '';
-  var cursor = document.createElement('span');
-  cursor.className = 'tw-cursor';
-  el.appendChild(cursor);
-  var i = 0;
-  setTimeout(function type() {
-    el.textContent = text.slice(0, i);
-    el.appendChild(cursor);
-    if (i < text.length) {
-      i++;
-      setTimeout(type, i < 3 ? 90 : 58);
-    } else {
-      setTimeout(function() { cursor.style.display = 'none'; }, 2200);
-    }
-  }, 850);
+  var phrases = [
+    'In Salt Lake City',
+    'Done Right',
+    'You Can Trust',
+    'Fast & Honest',
+    'Any Make, Any Model',
+    'With a Free Estimate'
+  ];
+  var idx = 0;
+  function showPhrase(phrase) {
+    el.style.transition = 'opacity .4s ease, transform .4s ease';
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(12px)';
+    setTimeout(function() {
+      el.textContent = phrase;
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
+    }, 420);
+  }
+  el.style.display = 'inline-block';
+  showPhrase(phrases[idx]);
+  setInterval(function() {
+    idx = (idx + 1) % phrases.length;
+    showPhrase(phrases[idx]);
+  }, 5000);
 })();
 
 </script>
