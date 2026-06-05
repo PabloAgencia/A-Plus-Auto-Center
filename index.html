@@ -1141,6 +1141,31 @@
       .ba-wrap { aspect-ratio:1/1; }
     }
 
+    /* ── CURSOR SPOTLIGHT ── */
+    #cursor-glow { position:fixed; width:380px; height:380px; border-radius:50%; pointer-events:none; z-index:1; transform:translate(-50%,-50%); background:radial-gradient(circle, rgba(245,158,11,.07) 0%, transparent 65%); transition:left .08s, top .08s; display:none; }
+    @media(hover:hover){ #cursor-glow { display:block; } }
+
+    /* ── RIPPLE EN BOTONES ── */
+    @keyframes rippleAnim { to { transform:scale(28); opacity:0; } }
+    .btn-primary, .btn-outline, .nav-cta { overflow:hidden; }
+
+    /* ── SPARKS AL LLAMAR ── */
+    @keyframes sparkFly { to { transform:translate(var(--dx),var(--dy)) scale(0); opacity:0; } }
+
+    /* ── TILT 3D TARJETAS ── */
+    .srv { transition:transform .15s ease, background .25s; transform-style:preserve-3d; will-change:transform; }
+
+    /* ── GLITCH HERO ── */
+    @keyframes glitchSlip {
+      0%   { clip-path:inset(0 0 95% 0); transform:translateX(-4px); }
+      20%  { clip-path:inset(30% 0 40% 0); transform:translateX(4px); }
+      40%  { clip-path:inset(60% 0 10% 0); transform:translateX(-2px); }
+      60%  { clip-path:inset(10% 0 70% 0); transform:translateX(3px); }
+      80%  { clip-path:inset(80% 0 5% 0);  transform:translateX(-1px); }
+      100% { clip-path:inset(0 0 0 0);     transform:translateX(0); }
+    }
+    .hero-glitch { animation:glitchSlip .35s steps(1) forwards; }
+
     /* ── SHINE EN SERVICE CARDS ── */
     .srv { position: relative; overflow: hidden; }
     .srv::before {
@@ -1175,6 +1200,7 @@
 </head>
 <body>
 <div id="scroll-bar"></div>
+<div id="cursor-glow"></div>
 <canvas id="particles-canvas"></canvas>
 <div id="scroll-bar"></div>
 
@@ -2180,7 +2206,7 @@
   });
 })();
 
-// ── Rotating hero highlight ──
+// ── Rotating hero highlight with glitch ──
 (function() {
   var el = document.getElementById('tw-target');
   if (!el) return;
@@ -2192,22 +2218,29 @@
     'Any Make, Any Model',
     'With a Free Estimate'
   ];
+  var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%&*';
   var idx = 0;
-  function showPhrase(phrase) {
-    el.style.transition = 'opacity .4s ease, transform .4s ease';
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(12px)';
-    setTimeout(function() {
-      el.textContent = phrase;
-      el.style.opacity = '1';
-      el.style.transform = 'translateY(0)';
-    }, 420);
+  function glitchThen(phrase) {
+    var steps = 8, step = 0;
+    el.style.transition = 'none';
+    el.classList.add('hero-glitch');
+    var iv = setInterval(function() {
+      if (step++ < steps) {
+        el.textContent = phrase.split('').map(function(c) {
+          return c === ' ' ? ' ' : (Math.random() > 0.4 ? chars[Math.floor(Math.random()*chars.length)] : c);
+        }).join('');
+      } else {
+        clearInterval(iv);
+        el.textContent = phrase;
+        el.classList.remove('hero-glitch');
+      }
+    }, 40);
   }
   el.style.display = 'inline-block';
-  showPhrase(phrases[idx]);
+  glitchThen(phrases[idx]);
   setInterval(function() {
     idx = (idx + 1) % phrases.length;
-    showPhrase(phrases[idx]);
+    glitchThen(phrases[idx]);
   }, 5000);
 })();
 
@@ -2257,6 +2290,64 @@
   var obs = new IntersectionObserver(function(e){ if(e[0].isIntersecting){run();obs.disconnect();} },{threshold:0.6});
   var el = document.querySelector('.hero-stats');
   if(el) obs.observe(el);
+})();
+
+// ── Cursor spotlight ──
+(function(){
+  var glow = document.getElementById('cursor-glow');
+  if(!glow) return;
+  window.addEventListener('mousemove', function(e){
+    glow.style.left = e.clientX + 'px';
+    glow.style.top  = e.clientY + 'px';
+  }, {passive:true});
+})();
+
+// ── Ripple en botones ──
+(function(){
+  document.querySelectorAll('.btn-primary,.btn-outline,.nav-cta,.averia-cta').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      var r = document.createElement('span');
+      var rect = btn.getBoundingClientRect();
+      r.style.cssText = 'position:absolute;border-radius:50%;width:8px;height:8px;background:rgba(255,255,255,.55);transform:scale(0);animation:rippleAnim .55s linear;left:'+(e.clientX-rect.left-4)+'px;top:'+(e.clientY-rect.top-4)+'px;pointer-events:none;';
+      btn.appendChild(r);
+      setTimeout(function(){ r.remove(); }, 600);
+    });
+  });
+})();
+
+// ── Sparks al hacer click en llamada ──
+(function(){
+  var btns = document.querySelectorAll('a[href^="tel"]');
+  btns.forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      var x = e.clientX, y = e.clientY;
+      for(var i=0;i<16;i++){
+        var s = document.createElement('div');
+        var angle = (i/16)*Math.PI*2;
+        var dist = 35 + Math.random()*40;
+        var dx = Math.cos(angle)*dist, dy = Math.sin(angle)*dist;
+        var colors = ['#F59E0B','#FBBF24','#EF4444','#fff'];
+        s.style.cssText = 'position:fixed;left:'+x+'px;top:'+y+'px;width:'+(4+Math.random()*4)+'px;height:'+(4+Math.random()*4)+'px;border-radius:50%;background:'+colors[Math.floor(Math.random()*colors.length)]+';pointer-events:none;z-index:99999;animation:sparkFly .55s ease-out forwards;--dx:'+dx+'px;--dy:'+dy+'px;';
+        document.body.appendChild(s);
+        setTimeout(function(){ s.remove(); }, 600);
+      }
+    });
+  });
+})();
+
+// ── Tilt 3D en tarjetas de servicio ──
+(function(){
+  document.querySelectorAll('.srv').forEach(function(card){
+    card.addEventListener('mousemove', function(e){
+      var r = card.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width  - 0.5;
+      var y = (e.clientY - r.top)  / r.height - 0.5;
+      card.style.transform = 'perspective(700px) rotateY('+x*14+'deg) rotateX('+(-y*14)+'deg) translateZ(10px)';
+    });
+    card.addEventListener('mouseleave', function(){
+      card.style.transform = '';
+    });
+  });
 })();
 
 // ── Before / After slider ──
