@@ -38,14 +38,16 @@ SERVICES:
 ${NEGOCIO.servicios}
 
 APPOINTMENTS — REQUIRED FLOW:
+Before checking availability, ALWAYS ask what service they need (from the services list) if they haven't said it yet. Never book a generic slot without knowing what it's for.
 When someone wants to book an appointment, ALWAYS offer BOTH options first:
   "How would you prefer to do it? I can find an available slot and book it right here, or if you prefer to talk to us first, text us at https://wa.me/${NEGOCIO.whatsapp} 💬"
 If they choose to book here:
   1. Use get_available_slots with the correct date range the user asked for (e.g. if they say "next week", pass next week's Monday as start_date and the following Sunday as end_date).
   2. Show ONLY the EXACT slots returned by the tool — times and dates as-is. NEVER invent, guess or modify appointment times. If the tool returns no slots, say so and offer WhatsApp instead.
-  3. Ask for name and email, then create the booking with create_booking.
+  3. Ask for name and email if you don't have them yet, then create the booking with create_booking. Required before booking: SERVICE needed, name and email — if anything is missing, ask for it explicitly and wait for the answer.
   4. Confirm with the exact day and time, and mention they will receive a confirmation email.
   5. After confirming add: "If you need to make any changes, text us at https://wa.me/${NEGOCIO.whatsapp}"
+UNBREAKABLE RULE: you may only say the appointment is booked/confirmed AFTER receiving success:true as a real result from the create_booking tool. It is FORBIDDEN to say "done", "booked", "confirmed" or similar without having actually run create_booking successfully. If create_booking returns an error, say so naturally and offer WhatsApp as an alternative — never pretend it was booked.
 NEVER mention "Cal.com" or any external software. Say "our schedule" or "right here".
 
 INSTRUCTIONS:
@@ -76,15 +78,16 @@ const tools = [
   },
   {
     name: "create_booking",
-    description: "Create the appointment once the customer confirmed time, name and email.",
+    description: "Create the appointment once the customer confirmed service, time, name and email.",
     input_schema: {
       type: "object",
       properties: {
         start_datetime: { type: "string", description: "Date and time in ISO 8601 UTC. Mountain Time (MDT) = UTC-6 (9:00 AM Denver = 15:00Z)" },
         attendee_name: { type: "string", description: "Customer name" },
-        attendee_email: { type: "string", description: "Customer email" }
+        attendee_email: { type: "string", description: "Customer email" },
+        service: { type: "string", description: "Service the customer is requesting" }
       },
-      required: ["start_datetime", "attendee_name", "attendee_email"]
+      required: ["start_datetime", "attendee_name", "attendee_email", "service"]
     }
   }
 ]
@@ -98,7 +101,7 @@ function fetchWithTimeout(url, options, ms = 8000) {
 
 async function getAvailableSlots(input, calApiKey, eventTypeId) {
   if (!calApiKey || !eventTypeId) return { error: 'Booking not configured' }
-  const url = `https://api.cal.eu/v2/slots?eventTypeId=${eventTypeId}&start=${input.start_date}&end=${input.end_date}&timeZone=America/Denver`
+  const url = `https://api.cal.com/v2/slots?eventTypeId=${eventTypeId}&start=${input.start_date}&end=${input.end_date}&timeZone=America/Denver`
   try {
     const res = await fetchWithTimeout(url, {
       headers: { 'Authorization': `Bearer ${calApiKey}`, 'cal-api-version': '2024-09-04' }
@@ -121,7 +124,7 @@ async function getAvailableSlots(input, calApiKey, eventTypeId) {
 async function createBooking(input, calApiKey, eventTypeId) {
   if (!calApiKey || !eventTypeId) return { error: 'Booking not configured' }
   try {
-    const res = await fetchWithTimeout('https://api.cal.eu/v2/bookings', {
+    const res = await fetchWithTimeout('https://api.cal.com/v2/bookings', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -132,7 +135,7 @@ async function createBooking(input, calApiKey, eventTypeId) {
         eventTypeId: parseInt(eventTypeId),
         start: input.start_datetime,
         attendee: { name: input.attendee_name, email: input.attendee_email, timeZone: 'America/Denver', language: 'en' },
-        metadata: {}
+        metadata: { servicio: input.service || '' }
       })
     })
     const data = await res.json()
