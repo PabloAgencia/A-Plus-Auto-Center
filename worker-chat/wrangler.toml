@@ -1,0 +1,19 @@
+# Backend del chat de esta demo, servido como Worker en *.workers.dev.
+#
+# Motivo: los bloqueos de LaLiga tumban el rango de IPs de pages.dev, pero
+# no el de workers.dev. La demo se sirve desde GitHub Pages (inmune) y el
+# chat desde aqui, asi que no se cae ni en dia de partido.
+#
+# No duplica codigo: src/index.js importa el mismo functions/api/chat.js
+# de siempre, asi que el prompt del bot sigue teniendo una sola copia.
+
+name = "aplus-chat"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+account_id = "8805ab4e3e430ec0e4a0ca8142402f00"
+
+# Mismo namespace que usaba en Pages: el limite de mensajes por IP y por
+# sesion sigue contando igual, no se reinicia por cambiar de sitio.
+[[kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id = "46efcebe2b3d4467bd1a87a7bbf53378"
